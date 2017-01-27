@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
+		<title>Esri Integration Example 1</title>
+		
+		<style>
+			html, body, #esri-map {
+				height: 100%;
+				width: 100%;
+				margin: 0;
+				padding: 0;
+			}
+			body {
+				overflow: hidden;
+			}
+		</style>	
+		
+		<!-- ESRI CSS -->			
+   		<link rel="stylesheet" href="//js.arcgis.com/4.2/esri/css/main.css">
+
+		<script src="//js.arcgis.com/4.2/"></script>
+		
+		<script>
+		    var config = {
+	    		webmapId: "f2e9b762544945f390ca4ac3671cfa72"
+	    	};
+		
+			require(["esri/views/MapView", "esri/WebMap", "esri/geometry/Circle", "esri/symbols/SimpleFillSymbol", "esri/Graphic", "dojo/domReady!"], function(MapView, WebMap, Circle, SimpleFillSymbol, Graphic) {
+				var webmap, 
+					view,
+					symbol = new SimpleFillSymbol({
+						color: null,
+						outline: {
+							color: "blue"
+						}
+					});
+				
+				// Get portal webmap
+				webmap = new WebMap({
+        			portalItem: { 
+          				id: config.webmapId
+        			}
+      			});
+      			
+      			// Create the view
+      			view = new MapView({
+        			map: webmap,
+        			container: "esri-map"
+      			});
+      			
+      			// Disable webmap popups
+      			view.popup = null;
+      			
+      			view.then(function() {
+      				view.on("click", drawCircle);
+      			});
+      
+				function drawCircle(e) {
+					var circle, radius;
+					
+					// Clear existing grahics
+			    	view.graphics.removeAll();
+			    	
+			    	radius = view.extent.width / 10;
+	          		circle = new Circle({
+	            		center: e.mapPoint,
+	            		radius: radius
+	          		});
+	          		
+	          		view.graphics.add(new Graphic(circle, symbol));
+				}
+			});
+		</script>
+	</head>
+
+	<body>	
+		<div id="esri-map"></div>
+	</body>
+</html>
