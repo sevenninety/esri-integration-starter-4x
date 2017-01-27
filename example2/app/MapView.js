@@ -82,6 +82,11 @@ define([
           		});
           		
           		view.graphics.add(new Graphic(circle, this.symbol));
+			},
+			
+			showExtent: function() {
+				var view = this.view;
+				alert (view.extent.xmin + " " + view.extent.ymin + view.extent.xmax + " " + view.extent.ymax);
 			}
         });
         
